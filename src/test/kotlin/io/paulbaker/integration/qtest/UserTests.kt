@@ -1,11 +1,8 @@
 package io.paulbaker.integration.qtest
 
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.not
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.greaterThan
-import org.hamcrest.collection.IsEmptyCollection.empty
-import org.hamcrest.text.IsEmptyString.emptyOrNullString
+import io.paulbaker.integration.getTestProject
+import io.paulbaker.integration.testableQTestClient
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class UserTests {
@@ -16,14 +13,14 @@ class UserTests {
         val projectId = getTestProject().id
         val projectClient = testableQTestClient.projectClient()
         val users = projectClient.users(projectId)
-        assertThat(users, not(empty()))
+        assertThat(users).isNotEmpty
 
         val userClient = testableQTestClient.userClient()
         users.forEach { user ->
-            assertThat(user.id, greaterThan(0L))
-            assertThat(user.username, not(emptyOrNullString()))
-            val userFromId = userClient.fromId(user.id)
-            assertThat(userFromId, `is`(user))
+            assertThat(user.id).isGreaterThan(0L)
+            assertThat(user.username).isNotNull().isNotEmpty()
+            val fromId = userClient.fromId(user.id)
+            assertThat(user).isEqualTo(fromId)
         }
     }
 }

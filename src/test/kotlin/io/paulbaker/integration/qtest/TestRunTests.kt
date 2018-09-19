@@ -1,14 +1,12 @@
 package io.paulbaker.integration.qtest
 
-import io.kotlintest.provided.getTestProject
-import io.kotlintest.provided.randomUUID
-import io.kotlintest.provided.testableQTestClient
+import io.paulbaker.integration.getTestProject
+import io.paulbaker.integration.randomUUID
+import io.paulbaker.integration.testableQTestClient
 import io.paulbaker.qtest.TestResult
 import io.paulbaker.qtest.TestRunParent
 import io.paulbaker.qtest.TextAttachment
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.greaterThan
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
 
@@ -22,8 +20,8 @@ class TestRunTests {
         val testRunClient = testableQTestClient.testRunClient(projectId)
         val name = "${randomUUID()}-testrun-root"
         val testRun = testRunClient.create(name, 23818835)
-        assertThat(testRun.id, greaterThan(0L))
-        assertThat(testRun.name, `is`(name))
+        assertThat(testRun.id).isGreaterThan(0L)
+        assertThat(testRun.name).isEqualTo(name)
     }
 
     @Test
@@ -32,8 +30,8 @@ class TestRunTests {
         val testRunClient = testableQTestClient.testRunClient(projectId)
         val name = "${randomUUID()}-testrun-deleteme"
         val testRun = testRunClient.create(name, 23818835)
-        assertThat(testRun.id, greaterThan(0L))
-        assertThat(testRun.name, `is`(name))
+        assertThat(testRun.id).isGreaterThan(0L)
+        assertThat(testRun.name).isEqualTo(name)
         testRunClient.delete(testRun.id)
     }
 
@@ -46,8 +44,8 @@ class TestRunTests {
         val testRunClient = testableQTestClient.testRunClient(projectId)
         val name = "${randomUUID()}-testrun-nested-in-testcycle"
         val testRun = testRunClient.create(name, 23818835, TestRunParent.TEST_CYCLE, testCycle.id)
-        assertThat(testRun.id, greaterThan(0L))
-        assertThat(testRun.name, `is`(name))
+        assertThat(testRun.id).isGreaterThan(0L)
+        assertThat(testRun.name).isEqualTo(name)
     }
 
     @Test

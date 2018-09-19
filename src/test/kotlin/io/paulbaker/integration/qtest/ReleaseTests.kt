@@ -1,14 +1,9 @@
 package io.paulbaker.integration.qtest
 
-import io.kotlintest.provided.getTestProject
-import io.kotlintest.provided.randomUUID
-import io.kotlintest.provided.testableQTestClient
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.not
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.greaterThan
-import org.hamcrest.collection.IsEmptyCollection.empty
-import org.hamcrest.text.IsEmptyString.emptyOrNullString
+import io.paulbaker.integration.getTestProject
+import io.paulbaker.integration.randomUUID
+import io.paulbaker.integration.testableQTestClient
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ReleaseTests {
@@ -19,8 +14,8 @@ class ReleaseTests {
         val releaseClient = testableQTestClient().releaseClient(testProject.id)
         val releaseName = randomUUID()
         val release = releaseClient.create(releaseName)
-        assertThat(release.id, greaterThan(0L))
-        assertThat(release.name, `is`(releaseName))
+        assertThat(release.id).isGreaterThan(0L)
+        assertThat(release.name).isEqualTo(releaseName)
     }
 
     @Test
@@ -29,8 +24,8 @@ class ReleaseTests {
         val releaseClient = testableQTestClient().releaseClient(testProject.id)
         val releaseName = randomUUID()
         val release = releaseClient.create(releaseName)
-        assert(releaseClient.delete(release.id), { "Couldn't delete release." })
-        assert(!releaseClient.delete(release.id), { "Shouldn't be able to delete twice." })
+//        assert(releaseClient.delete(release.id), { "Couldn't delete release." })
+//        assert(!releaseClient.delete(release.id), { "Shouldn't be able to delete twice." })
     }
 
     @Test
@@ -38,10 +33,10 @@ class ReleaseTests {
         val testProject = getTestProject()
         val releaseClient = testableQTestClient().releaseClient(testProject.id)
         val releases = releaseClient.releases()
-        assertThat(releases, not(empty()))
+        assertThat(releases).isNotEmpty
         releases.forEach { release ->
-            assertThat(release.id, greaterThan(0L))
-            assertThat(release.name, not(emptyOrNullString()))
+            assertThat(release.id).isGreaterThan(0L)
+            assertThat(release.name).isNotNull().isNotEmpty()
         }
     }
 
@@ -50,12 +45,12 @@ class ReleaseTests {
         val testProject = getTestProject()
         val releaseClient = testableQTestClient().releaseClient(testProject.id)
         val releases = releaseClient.releases()
-        assertThat(releases, not(empty()))
+        assertThat(releases).isNotEmpty
         releases.forEach { release ->
-            assertThat(release.id, greaterThan(0L))
-            assertThat(release.name, not(emptyOrNullString()))
+            assertThat(release.id).isGreaterThan(0L)
+            assertThat(release.name).isNotNull().isNotEmpty()
             val releaseFromId = releaseClient.fromId(release.id)
-            assertThat(release, `is`(releaseFromId))
+            assertThat(release).isEqualTo(releaseFromId)
         }
     }
 }
