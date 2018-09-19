@@ -1,6 +1,5 @@
 package io.paulbaker.integration
 
-//import io.kotlintest.AbstractProjectConfig
 import io.paulbaker.integration.qtest.Project
 import io.paulbaker.integration.qtest.QTestClient
 
