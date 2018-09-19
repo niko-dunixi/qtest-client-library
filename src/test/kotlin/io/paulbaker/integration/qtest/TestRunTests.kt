@@ -3,9 +3,6 @@ package io.paulbaker.integration.qtest
 import io.paulbaker.integration.getTestProject
 import io.paulbaker.integration.randomUUID
 import io.paulbaker.integration.testableQTestClient
-import io.paulbaker.qtest.TestResult
-import io.paulbaker.qtest.TestRunParent
-import io.paulbaker.qtest.TextAttachment
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime

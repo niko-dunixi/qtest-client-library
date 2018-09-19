@@ -1,7 +1,6 @@
 package io.paulbaker.integration.qtest
 
 import io.paulbaker.integration.testableQTestClient
-import io.paulbaker.qtest.FieldParent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

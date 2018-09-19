@@ -1,8 +1,8 @@
 package io.paulbaker.integration
 
 //import io.kotlintest.AbstractProjectConfig
-import io.paulbaker.qtest.Project
-import io.paulbaker.qtest.QTestClient
+import io.paulbaker.integration.qtest.Project
+import io.paulbaker.integration.qtest.QTestClient
 
 val QTestSubDomain: String = System.getenv("QTEST_SUBDOMAIN")
 val QTestCredentials: Pair<String, String> = Pair(System.getenv("QTEST_USER"), System.getenv("QTEST_PASS"))

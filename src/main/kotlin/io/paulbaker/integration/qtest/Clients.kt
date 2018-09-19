@@ -1,8 +1,9 @@
-package io.paulbaker.qtest
+package io.paulbaker.integration.qtest
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import io.paulbaker.integration.qtest.rest.*
 import io.paulbaker.qtest.rest.*
 import okhttp3.*
 import java.text.SimpleDateFormat

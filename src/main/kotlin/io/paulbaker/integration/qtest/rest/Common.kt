@@ -1,4 +1,4 @@
-package io.paulbaker.qtest.rest
+package io.paulbaker.integration.qtest.rest
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
