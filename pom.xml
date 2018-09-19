@@ -10,6 +10,36 @@
     <packaging>jar</packaging>
 
     <name>qtest-client-library</name>
+    <description>
+        A JVM based library written in Kotlin to facilitate communication with the QTest restful API.
+    </description>
+    <url>https://github.com/paul-nelson-baker/qtest-client-library</url>
+
+    <developers>
+        <developer>
+            <id>PaulBakerSaltShaker</id>
+            <name>Paul Nelson Baker</name>
+            <email>paul.nelson.baker@gmail.com</email>
+            <roles>
+                <role>Senior Software Engineer</role>
+                <role>AWS Certified Developer</role>
+                <role>Air Guitar Enthusiast</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/paul-nelson-baker/qtest-client-library.git</connection>
+        <developerConnection>scm:git:ssh://github.com:paul-nelson-baker/qtest-client-library.git</developerConnection>
+        <url>http://github.com/paul-nelson-baker/qtest-client-library/tree/master</url>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -75,13 +105,30 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+        <!--JUnit managed via BOM-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.3.1</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
