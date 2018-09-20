@@ -13,10 +13,10 @@ class ProjectTests {
         val projectClient = testableQTestClient.projectClient()
         val projects = projectClient.projects()
         assertThat(projects).isNotEmpty
-        projects.forEach({ project ->
+        projects.forEach { project ->
             assertThat(project.id).isGreaterThan(0)
             assertThat(project.name).isNotNull().isNotEmpty()
-        })
+        }
     }
 
     @Test
@@ -24,10 +24,10 @@ class ProjectTests {
         val projectClient = testableQTestClient.projectClient()
         val projects = projectClient.projects()
         assertThat(projects).isNotEmpty
-        projects.forEach({ project ->
+        projects.forEach { project ->
             val projectFromId = projectClient.fromId(project.id)
             assertThat(project).isEqualTo(projectFromId)
-        })
+        }
     }
 
 //    @Test
