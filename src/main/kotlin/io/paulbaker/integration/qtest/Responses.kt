@@ -125,7 +125,11 @@ data class Testcase(
         val name: String,
         val description: String,
         val precondition: String,
+        @JsonProperty("test_case_version_id")
+        val version: Double,
         val pid: String,
+        @JsonProperty("creator_id")
+        val creatorId: Int,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("created_date")
         val createdDate: LocalDateTime,
