@@ -14,7 +14,7 @@ class ProjectTests {
         val projects = projectClient.projects()
         assertThat(projects).isNotEmpty
         projects.forEach({ project ->
-            assertThat(project.id).isGreaterThan(0L)
+            assertThat(project.id).isGreaterThan(0)
             assertThat(project.name).isNotNull().isNotEmpty()
         })
     }

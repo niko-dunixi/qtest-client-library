@@ -17,7 +17,7 @@ class TestRunTests {
         val testRunClient = testableQTestClient.testRunClient(projectId)
         val name = "${randomUUID()}-testrun-root"
         val testRun = testRunClient.create(name, 23818835)
-        assertThat(testRun.id).isGreaterThan(0L)
+        assertThat(testRun.id).isGreaterThan(0)
         assertThat(testRun.name).isEqualTo(name)
     }
 
@@ -27,7 +27,7 @@ class TestRunTests {
         val testRunClient = testableQTestClient.testRunClient(projectId)
         val name = "${randomUUID()}-testrun-deleteme"
         val testRun = testRunClient.create(name, 23818835)
-        assertThat(testRun.id).isGreaterThan(0L)
+        assertThat(testRun.id).isGreaterThan(0)
         assertThat(testRun.name).isEqualTo(name)
         testRunClient.delete(testRun.id)
     }
@@ -41,7 +41,7 @@ class TestRunTests {
         val testRunClient = testableQTestClient.testRunClient(projectId)
         val name = "${randomUUID()}-testrun-nested-in-testcycle"
         val testRun = testRunClient.create(name, 23818835, TestRunParent.TEST_CYCLE, testCycle.id)
-        assertThat(testRun.id).isGreaterThan(0L)
+        assertThat(testRun.id).isGreaterThan(0)
         assertThat(testRun.name).isEqualTo(name)
     }
 

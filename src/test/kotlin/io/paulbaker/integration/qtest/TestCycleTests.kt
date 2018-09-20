@@ -16,7 +16,7 @@ class TestCycleTests {
         val testCycleClient = testableQTestClient.testCycleClient(project.id)
         val rootName = "${randomUUID()}-root-tc-empty"
         val rootTestCycle = testCycleClient.create(rootName)
-        assertThat(rootTestCycle.id).isGreaterThan(0L)
+        assertThat(rootTestCycle.id).isGreaterThan(0)
         assertThat(rootTestCycle.name).isEqualTo(rootName)
     }
 
@@ -26,12 +26,12 @@ class TestCycleTests {
         val testCycleClient = testableQTestClient.testCycleClient(project.id)
         val rootName = "${randomUUID()}-root-tc-with-nested-tc"
         val rootTestCycle = testCycleClient.create(rootName)
-        assertThat(rootTestCycle.id).isGreaterThan(0L)
+        assertThat(rootTestCycle.id).isGreaterThan(0)
         assertThat(rootTestCycle.name).isEqualTo(rootName)
 
         val nestedName = "${randomUUID()}-tc-nested-under-tc"
         val nestedTestCycle = testCycleClient.create(nestedName, TestCycleParent.TEST_CYCLE, rootTestCycle.id)
-        assertThat(nestedTestCycle.id).isGreaterThan(0L)
+        assertThat(nestedTestCycle.id).isGreaterThan(0)
         assertThat(nestedTestCycle.name).isEqualTo(nestedName)
 
         assertThat(rootTestCycle).isNotEqualTo(nestedTestCycle)
@@ -55,7 +55,7 @@ class TestCycleTests {
         val testCycleClient = testableQTestClient.testCycleClient(project.id)
         val name = randomUUID()
         val createdTestCycle = testCycleClient.create(name)
-        assertThat(createdTestCycle.id).isGreaterThan(0L)
+        assertThat(createdTestCycle.id).isGreaterThan(0)
         assertThat(createdTestCycle.name).isEqualTo(name)
 //        assert(testCycleClient.delete(createdTestCycle.id), { "Couldn't delete the test-cycle: ${createdTestCycle.name} - ${createdTestCycle.id}" })
 //        assert(!testCycleClient.delete(createdTestCycle.id), { "We shouldn't be able to delete the test-cycle twice: ${createdTestCycle.name} - ${createdTestCycle.id}" })
@@ -68,7 +68,7 @@ class TestCycleTests {
         val releases = releaseClient.releases()
         assertThat(releases).isNotEmpty
         releases.forEach { release ->
-            assertThat(release.id).isGreaterThan(0L)
+            assertThat(release.id).isGreaterThan(0)
             assertThat(release.name).isNotNull().isNotEmpty()
         }
     }

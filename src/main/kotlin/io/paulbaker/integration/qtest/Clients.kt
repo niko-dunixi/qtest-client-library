@@ -24,19 +24,19 @@ class QTestClient(private val qTestSubDomain: String, credentials: Pair<String, 
 
     fun projectClient(): ProjectClient = ProjectClient(okHttpClient, host)
 
-    fun fieldClient(projectId: Long): FieldClient = FieldClient(okHttpClient, host, projectId)
+    fun fieldClient(projectId: Int): FieldClient = FieldClient(okHttpClient, host, projectId)
 
-    fun searchClient(projectId: Long): SearchClient = SearchClient(okHttpClient, host, projectId)
+    fun searchClient(projectId: Int): SearchClient = SearchClient(okHttpClient, host, projectId)
 
-    fun moduleClient(projectId: Long): ModuleClient = ModuleClient(okHttpClient, host, projectId)
+    fun moduleClient(projectId: Int): ModuleClient = ModuleClient(okHttpClient, host, projectId)
 
-    fun testCaseClient(projectId: Long): TestCaseClient = TestCaseClient(okHttpClient, host, projectId)
+    fun testcaseClient(projectId: Int): TestcaseClient = TestcaseClient(okHttpClient, host, projectId)
 
-    fun releaseClient(projectId: Long): ReleaseClient = ReleaseClient(okHttpClient, host, projectId)
+    fun releaseClient(projectId: Int): ReleaseClient = ReleaseClient(okHttpClient, host, projectId)
 
-    fun testCycleClient(projectId: Long): TestCycleClient = TestCycleClient(okHttpClient, host, projectId)
+    fun testCycleClient(projectId: Int): TestCycleClient = TestCycleClient(okHttpClient, host, projectId)
 
-    fun testRunClient(projectId: Long): TestRunClient = TestRunClient(okHttpClient, host, projectId)
+    fun testRunClient(projectId: Int): TestRunClient = TestRunClient(okHttpClient, host, projectId)
 
     fun userClient(): UserClient = UserClient(okHttpClient, host)
 
@@ -87,7 +87,7 @@ class ProjectClient(private val okHttpClient: OkHttpClient, private val host: St
     /**
      * @see <a href="https://api.qasymphony.com/#/project/getUsers">qTest API</a>
      */
-    fun fromId(id: Long): Project {
+    fun fromId(id: Int): Project {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$id")
                 .get()
@@ -130,7 +130,7 @@ class ProjectClient(private val okHttpClient: OkHttpClient, private val host: St
 //    /**
 //     * The API doesn't have this endpoint. We'll need to spoof it to act same the way the UI does.
 //     */
-//    fun delete(projectId: Long): Boolean {
+//    fun delete(projectId: Int): Boolean {
 //        val request = Request.Builder()
 //                .url("$host/admin/proj/delete-project")
 //                .post(FormBody.Builder()
@@ -144,7 +144,7 @@ class ProjectClient(private val okHttpClient: OkHttpClient, private val host: St
     /**
      * @see <a href="https://api.qasymphony.com/#/project/getUsers">qTest API</a>
      */
-    fun users(projectId: Long): List<User> {
+    fun users(projectId: Int): List<User> {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/users")
                 .get()
@@ -161,7 +161,7 @@ class UserClient(private val okHttpClient: OkHttpClient, private val host: Strin
     /**
      * @see <a href="https://api.qasymphony.com/#/user/getUserById">qTest API</a>
      */
-    fun fromId(userId: Long): User {
+    fun fromId(userId: Int): User {
         val request = Request.Builder()
                 .url("$host/api/v3/users/$userId")
                 .get()
@@ -171,12 +171,12 @@ class UserClient(private val okHttpClient: OkHttpClient, private val host: Strin
     }
 }
 
-class ReleaseClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Long) {
+class ReleaseClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Int) {
 
     /**
      * @see <a href="https://api.qasymphony.com/#/release/get2">qTest API</a>
      */
-    fun fromId(releaseId: Long): Release {
+    fun fromId(releaseId: Int): Release {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/releases/$releaseId")
                 .get()
@@ -214,7 +214,7 @@ class ReleaseClient(private val okHttpClient: OkHttpClient, private val host: St
     /**
      * @see <a href="https://api.qasymphony.com/#/release/delete2">qTest API</a>
      */
-    fun delete(releaseId: Long): Boolean {
+    fun delete(releaseId: Int): Boolean {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/releases/$releaseId")
                 .delete()
@@ -224,12 +224,12 @@ class ReleaseClient(private val okHttpClient: OkHttpClient, private val host: St
     }
 }
 
-class TestCycleClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Long) {
+class TestCycleClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Int) {
 
     /**
      * @see <a href="https://api.qasymphony.com/#/test-cycle/getTestCycle">qTest API</a>
      */
-    fun fromId(testCycleId: Long): TestCycle {
+    fun fromId(testCycleId: Int): TestCycle {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/test-cycles/$testCycleId")
                 .get()
@@ -254,7 +254,7 @@ class TestCycleClient(private val okHttpClient: OkHttpClient, private val host: 
     /**
      * @see <a href="https://api.qasymphony.com/#/test-cycle/createCycle">qTest API</a>
      */
-    fun create(name: String, parentType: TestCycleParent = TestCycleParent.ROOT, parentId: Long = 0): TestCycle {
+    fun create(name: String, parentType: TestCycleParent = TestCycleParent.ROOT, parentId: Int = 0): TestCycle {
         val content = asJsonString(Item("name", name))
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/test-cycles?parentType=${parentType.value}&parentId=$parentId")
@@ -267,7 +267,7 @@ class TestCycleClient(private val okHttpClient: OkHttpClient, private val host: 
     /**
      * @see <a href="https://api.qasymphony.com/#/test-cycle/deleteCycle">qTest API</a>
      */
-    fun delete(testCycleId: Long): Boolean {
+    fun delete(testCycleId: Int): Boolean {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/test-cycles/$testCycleId")
                 .delete()
@@ -277,12 +277,12 @@ class TestCycleClient(private val okHttpClient: OkHttpClient, private val host: 
     }
 }
 
-class TestRunClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Long) {
+class TestRunClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Int) {
 
     /**
      * @see <a href="https://api.qasymphony.com/#/test-run/get3">qTest API</a>
      */
-    fun fromId(testRunId: Long): TestRun {
+    fun fromId(testRunId: Int): TestRun {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/test-runs/$testRunId")
                 .get()
@@ -294,7 +294,7 @@ class TestRunClient(private val okHttpClient: OkHttpClient, private val host: St
     /**
      * @see <a href="https://api.qasymphony.com/#/test-run/getOf">qTest API</a>
      */
-    fun testRuns(page: Long = 0, pageSize: Long = 20, parentType: TestCycleParent = TestCycleParent.ROOT, parentId: Long = 0): List<TestRun> {
+    fun testRuns(page: Int = 0, pageSize: Int = 20, parentType: TestCycleParent = TestCycleParent.ROOT, parentId: Int = 0): List<TestRun> {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/test-runs?parentId=$parentId&parentType=${parentType.value}&page=$page&pageSize=$pageSize")
                 .get()
@@ -307,7 +307,7 @@ class TestRunClient(private val okHttpClient: OkHttpClient, private val host: St
     /**
      * @see <a href="https://api.qasymphony.com/#/test-run/create4">qTest API</a>
      */
-    fun create(name: String, testCaseId: Long, parentType: TestRunParent = TestRunParent.ROOT, parentId: Long = 0): TestRun {
+    fun create(name: String, testCaseId: Int, parentType: TestRunParent = TestRunParent.ROOT, parentId: Int = 0): TestRun {
         val obj = object {
             val name = name
             @JsonProperty("test_case")
@@ -325,7 +325,7 @@ class TestRunClient(private val okHttpClient: OkHttpClient, private val host: St
     /**
      * @see <a href="https://api.qasymphony.com/#/test-cycle/deleteCycle">qTest API</a>
      */
-    fun delete(testRunId: Long): Boolean {
+    fun delete(testRunId: Int): Boolean {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/test-runs/$testRunId")
                 .delete()
@@ -334,7 +334,7 @@ class TestRunClient(private val okHttpClient: OkHttpClient, private val host: St
         return response.isSuccessful
     }
 
-    fun submitTestResults(testRunId: Long, testResult: TestResult): Map<String, Any> {
+    fun submitTestResults(testRunId: Int, testResult: TestResult): Map<String, Any> {
         val content = asJsonString(testResult)
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/test-runs/$testRunId/auto-test-logs?encodeNote=${testResult.noteIsHtml}")
@@ -345,7 +345,7 @@ class TestRunClient(private val okHttpClient: OkHttpClient, private val host: St
     }
 }
 
-class FieldClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Long) {
+class FieldClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Int) {
 
     fun fields(fieldParent: FieldParent): List<Field> {
         val request = Request.Builder()
@@ -358,20 +358,20 @@ class FieldClient(private val okHttpClient: OkHttpClient, private val host: Stri
     }
 }
 
-class TestCaseClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Long) {
+class TestcaseClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Int) {
 
-    fun testCases(moduleId: Long): List<Testcase> {
-        var page = 1L
+    fun testcases(moduleId: Int): List<Testcase> {
+        var page = 1
         val allTestCases = ArrayList<Testcase>()
         do {
-            val testCases = testCases(moduleId, page)
+            val testCases = testcases(moduleId, page)
             allTestCases.addAll(testCases)
             page++
         } while (testCases.isNotEmpty())
         return allTestCases
     }
 
-    private fun testCases(moduleId: Long, page: Long): List<Testcase> {
+    private fun testcases(moduleId: Int, page: Int): List<Testcase> {
         val queryParams = asQueryParamString(hashMapOf(
                 "parentId" to "$moduleId",
                 "page" to "$page"
@@ -385,7 +385,7 @@ class TestCaseClient(private val okHttpClient: OkHttpClient, private val host: S
         return responseToObj(response, testCaseListTypeReference)
     }
 
-    fun fromId(testCaseId: Long): Testcase {
+    fun fromId(testCaseId: Int): Testcase {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/test-cases/$testCaseId")
                 .get()
@@ -394,14 +394,14 @@ class TestCaseClient(private val okHttpClient: OkHttpClient, private val host: S
         return responseToObj(response, Testcase::class.java)
     }
 
-    fun create(moduleId: Long, name: String, description: String, precondition: String, properties: List<TestCaseField>, testCaseSteps: List<TestCaseStep>): Testcase {
+    fun create(moduleId: Int, name: String, description: String, precondition: String, properties: List<TestcaseField>, testcaseSteps: List<TestcaseStep>): Testcase {
         val hashMap = HashMap<String, Any>()
         hashMap["name"] = name
         hashMap["description"] = description
         hashMap["precondition"] = precondition
         hashMap["properties"] = properties
         hashMap["parent_id"] = moduleId
-        hashMap["test_steps"] = testCaseSteps
+        hashMap["test_steps"] = testcaseSteps
         val jsonString = asJsonString(hashMap)
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/test-cases")
@@ -411,29 +411,29 @@ class TestCaseClient(private val okHttpClient: OkHttpClient, private val host: S
         return responseToObj(response, Testcase::class.java)
     }
 
-    data class TestCaseField(
+    data class TestcaseField(
             @JsonProperty("field_id")
-            val id: Long,
+            val id: Int,
             @JsonProperty("field_value")
             val value: String
     )
 
-    data class TestCaseStep(
+    data class TestcaseStep(
             val description: String,
             val expected: String
     )
 }
 
-class ModuleClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Long) {
+class ModuleClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Int) {
 
     fun modules(): List<Module> {
-        return modules(0L)
+        return modules(0)
     }
 
-    fun modules(parentId: Long = 0): List<Module> {
-//    fun modules(parentId: Long = 0, search: String = ""): List<Module> {
+    fun modules(parentId: Int = 0): List<Module> {
+//    fun modules(parentId: Int = 0, search: String = ""): List<Module> {
         val queryItems = HashMap<String, String>()
-        if (parentId != 0L) {
+        if (parentId != 0) {
             queryItems["parentId"] = "$parentId"
         }
 //        if (search != "") {
@@ -450,7 +450,7 @@ class ModuleClient(private val okHttpClient: OkHttpClient, private val host: Str
         return responseToObj(response, moduleListTypeReference)
     }
 
-    fun fromId(moduleId: Long): Module {
+    fun fromId(moduleId: Int): Module {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/modules/$moduleId")
                 .get()
@@ -459,9 +459,9 @@ class ModuleClient(private val okHttpClient: OkHttpClient, private val host: Str
         return responseToObj(response, Module::class.java)
     }
 
-    fun create(name: String, description: String, parentId: Long = 0): Module {
+    fun create(name: String, description: String, parentId: Int = 0): Module {
         val queryItems = HashMap<String, String>()
-        if (parentId != 0L) {
+        if (parentId != 0) {
             queryItems["parentId"] = "$parentId"
         }
         val queryParams = asQueryParamString(queryItems)
@@ -483,7 +483,7 @@ class ModuleClient(private val okHttpClient: OkHttpClient, private val host: Str
     }
 }
 
-class SearchClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Long) {
+class SearchClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Int) {
 
     fun searchTestCases(query: String): List<Testcase> {
         val paginatedResponseTypeReference = object : TypeReference<PaginatedResponse<Testcase>>() {}

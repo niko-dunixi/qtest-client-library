@@ -11,7 +11,7 @@ import java.net.URL
 import java.time.LocalDateTime
 
 // Reference this for @JsonFormat patterns https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
-const val RECIEVING_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssXXXXX"
+const val RECEIVING_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssXXXXX"
 
 /**
  * @see <a href="https://api.qasymphony.com/#/login/postAccessToken">qTest API</a>
@@ -32,14 +32,14 @@ data class LoginTokenAuthenticator(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class User(
-        val id: Long,
+        val id: Int,
         val username: String,
         val email: String,
         @JsonProperty("first_name")
         val firstName: String,
         @JsonProperty("last_name")
         val lastName: String,
-        val status: Long,
+        val status: Int,
         val avatar: String,
         @JsonProperty("ldap_username")
         val ldapUsername: String?
@@ -47,13 +47,13 @@ data class User(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Project(
-        val id: Long,
+        val id: Int,
         val name: String,
         val description: String,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("start_date")
         val startDate: LocalDateTime?,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("end_date")
         val endDate: LocalDateTime?,
         @JsonProperty("automation")
@@ -62,14 +62,14 @@ data class Project(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Release(
-        val id: Long,
+        val id: Int,
         val name: String,
         val description: String,
         val pid: String,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("created_date")
         val createdDate: LocalDateTime,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("last_modified_date")
         val lastModifiedDate: LocalDateTime,
         @JsonProperty("web_url")
@@ -78,14 +78,14 @@ data class Release(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TestCycle(
-        val id: Long,
+        val id: Int,
         val name: String,
 //        val description: String,
         val pid: String,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("created_date")
         val createdDate: LocalDateTime,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("last_modified_date")
         val lastModifiedDate: LocalDateTime,
         @JsonProperty("web_url")
@@ -94,42 +94,42 @@ data class TestCycle(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TestRun(
-        val id: Long,
+        val id: Int,
         @JsonProperty("parent_id")
-        val parentId: Long,
+        val parentId: Int,
         val name: String,
         val pid: String,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("created_date")
         val createdDate: LocalDateTime,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("last_modified_date")
         val lastModifiedDate: LocalDateTime
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Module(
-        val id: Long,
+        val id: Int,
         val name: String,
         val pid: String,
         @JsonProperty("parent_id")
-        val parentId: Long,
+        val parentId: Int,
         val children: List<Module>?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Testcase(
-        val id: Long,
+        val id: Int,
         @JsonProperty("parent_id")
-        val parentId: Long,
+        val parentId: Int,
         val name: String,
         val description: String,
         val precondition: String,
         val pid: String,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("created_date")
         val createdDate: LocalDateTime,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("last_modified_date")
         val lastModifiedDate: LocalDateTime,
         @JsonProperty("web_url")
@@ -141,7 +141,7 @@ data class Testcase(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TestcaseProperties(
         @JsonProperty("field_id")
-        val id: Long,
+        val id: Int,
         @JsonProperty("field_name")
         val name: String,
         @JsonProperty("field_value")
@@ -152,22 +152,22 @@ data class TestcaseProperties(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Requirement(
-        val id: Long,
+        val id: Int,
         @JsonProperty("parent_id")
-        val parentId: Long,
+        val parentId: Int,
         val name: String,
         val pid: String,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("created_date")
         val createdDate: LocalDateTime,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECIEVING_DATE_PATTERN)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RECEIVING_DATE_PATTERN)
         @JsonProperty("last_modified_date")
         val lastModifiedDate: LocalDateTime
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Field(
-        val id: Long,
+        val id: Int,
         @JsonProperty("label")
         val name: String,
         val required: Boolean,
@@ -182,7 +182,7 @@ data class Field(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class FieldOption(
         @JsonProperty("value")
-        val id: Long,
+        val id: Int,
         val label: String,
         @JsonProperty("is_active")
         val active: Boolean,

@@ -14,7 +14,7 @@ class ReleaseTests {
         val releaseClient = testableQTestClient().releaseClient(testProject.id)
         val releaseName = randomUUID()
         val release = releaseClient.create(releaseName)
-        assertThat(release.id).isGreaterThan(0L)
+        assertThat(release.id).isGreaterThan(0)
         assertThat(release.name).isEqualTo(releaseName)
     }
 
@@ -35,7 +35,7 @@ class ReleaseTests {
         val releases = releaseClient.releases()
         assertThat(releases).isNotEmpty
         releases.forEach { release ->
-            assertThat(release.id).isGreaterThan(0L)
+            assertThat(release.id).isGreaterThan(0)
             assertThat(release.name).isNotNull().isNotEmpty()
         }
     }
@@ -47,7 +47,7 @@ class ReleaseTests {
         val releases = releaseClient.releases()
         assertThat(releases).isNotEmpty
         releases.forEach { release ->
-            assertThat(release.id).isGreaterThan(0L)
+            assertThat(release.id).isGreaterThan(0)
             assertThat(release.name).isNotNull().isNotEmpty()
             val releaseFromId = releaseClient.fromId(release.id)
             assertThat(release).isEqualTo(releaseFromId)
