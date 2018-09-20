@@ -118,7 +118,7 @@ data class Module(
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class TestCase(
+data class Testcase(
         val id: Long,
         @JsonProperty("parent_id")
         val parentId: Long,
@@ -135,11 +135,11 @@ data class TestCase(
         @JsonProperty("web_url")
         val url: URL,
         @JsonProperty("properties")
-        val properties: List<TestCaseProperties>
+        val properties: List<TestcaseProperties>
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class TestCaseProperties(
+data class TestcaseProperties(
         @JsonProperty("field_id")
         val id: Long,
         @JsonProperty("field_name")

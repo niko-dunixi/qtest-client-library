@@ -360,9 +360,9 @@ class FieldClient(private val okHttpClient: OkHttpClient, private val host: Stri
 
 class TestCaseClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Long) {
 
-    fun testCases(moduleId: Long): List<TestCase> {
+    fun testCases(moduleId: Long): List<Testcase> {
         var page = 1L
-        val allTestCases = ArrayList<TestCase>()
+        val allTestCases = ArrayList<Testcase>()
         do {
             val testCases = testCases(moduleId, page)
             allTestCases.addAll(testCases)
@@ -371,7 +371,7 @@ class TestCaseClient(private val okHttpClient: OkHttpClient, private val host: S
         return allTestCases
     }
 
-    private fun testCases(moduleId: Long, page: Long): List<TestCase> {
+    private fun testCases(moduleId: Long, page: Long): List<Testcase> {
         val queryParams = asQueryParamString(hashMapOf(
                 "parentId" to "$moduleId",
                 "page" to "$page"
@@ -381,20 +381,20 @@ class TestCaseClient(private val okHttpClient: OkHttpClient, private val host: S
                 .get()
                 .build()
         val response = okHttpClient.newCall(request).execute()
-        val testCaseListTypeReference = object : TypeReference<List<TestCase>>() {}
+        val testCaseListTypeReference = object : TypeReference<List<Testcase>>() {}
         return responseToObj(response, testCaseListTypeReference)
     }
 
-    fun fromId(testCaseId: Long): TestCase {
+    fun fromId(testCaseId: Long): Testcase {
         val request = Request.Builder()
                 .url("$host/api/v3/projects/$projectId/test-cases/$testCaseId")
                 .get()
                 .build()
         val response = okHttpClient.newCall(request).execute()
-        return responseToObj(response, TestCase::class.java)
+        return responseToObj(response, Testcase::class.java)
     }
 
-    fun create(moduleId: Long, name: String, description: String, precondition: String, properties: List<TestCaseField>, testCaseSteps: List<TestCaseStep>): TestCase {
+    fun create(moduleId: Long, name: String, description: String, precondition: String, properties: List<TestCaseField>, testCaseSteps: List<TestCaseStep>): Testcase {
         val hashMap = HashMap<String, Any>()
         hashMap["name"] = name
         hashMap["description"] = description
@@ -408,7 +408,7 @@ class TestCaseClient(private val okHttpClient: OkHttpClient, private val host: S
                 .post(RequestBody.create(MediaType.parse("application/json"), jsonString))
                 .build()
         val response = okHttpClient.newCall(request).execute()
-        return responseToObj(response, TestCase::class.java)
+        return responseToObj(response, Testcase::class.java)
     }
 
     data class TestCaseField(
@@ -485,8 +485,8 @@ class ModuleClient(private val okHttpClient: OkHttpClient, private val host: Str
 
 class SearchClient(private val okHttpClient: OkHttpClient, private val host: String, private val projectId: Long) {
 
-    fun searchTestCases(query: String): List<TestCase> {
-        val paginatedResponseTypeReference = object : TypeReference<PaginatedResponse<TestCase>>() {}
+    fun searchTestCases(query: String): List<Testcase> {
+        val paginatedResponseTypeReference = object : TypeReference<PaginatedResponse<Testcase>>() {}
         return searchIterativelyForAll(SearchTarget.TEST_CASE, query, paginatedResponseTypeReference)
     }
 
