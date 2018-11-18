@@ -76,7 +76,8 @@ Resources:
         SecretToken: !Ref GitHubPersonalAccessToken
       Filters:
         - JsonPath: "$.ref"
-          MatchEquals: refs/heads/{Branch}
+#          MatchEquals: refs/heads/{Branch}
+          MatchEquals: !Sub 'refs/heads/${GitHubSnapshotBranch}'
       TargetPipeline: !Ref SnapshotPipeline
       TargetAction: SourceAction
       Name: !Sub '${AWS::StackName}-snapshot-webhook'
