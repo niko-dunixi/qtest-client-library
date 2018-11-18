@@ -1,0 +1,111 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  Pipeline to build, test, and deploy the qtest-client-library JVM artifact to Maven Central
+
+Parameters:
+  GitHubPersonalAccessToken:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: '/qtest-client-library/github-personal-access-token'
+  GitHubOwner:
+    Type: String
+    Default: paul-nelson-baker
+  GitHubRepo:
+    Type: String
+    Default: qtest-client-library
+  GitHubReleaseBranch:
+    Type: String
+    Default: master
+  GitHubSnapshotBranch:
+    Type: String
+    Default: snapshot
+
+Resources:
+  PipelineArtifactBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${AWS::StackName}-artifact-bucket'
+
+  PipelineServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${AWS::StackName}-service-role'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSCodePipelineFullAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: 'Allow'
+          Principal:
+            Service:
+            - 'codepipeline.amazonaws.com'
+          Action:
+          - 'sts:AssumeRole'
+
+  SnapshotPipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: !Sub '${AWS::StackName}-snapshot-pipeline'
+      RoleArn: !GetAtt PipelineServiceRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref PipelineArtifactBucket
+      RestartExecutionOnUpdate: true
+      Stages:
+      - Name: !Sub 'stages_${GitHubRepo}_${GitHubSnapshotBranch}'
+        Actions:
+        - Name: !Sub 'github_${GitHubRepo}_${GitHubSnapshotBranch}_action'
+          ActionTypeId:
+            Category: Source
+            Owner: ThirdParty
+            Version: 1
+            Provider: GitHub
+          Configuration:
+            Owner: !Ref GitHubOwner
+            Repo: !Ref GitHubRepo
+            PollForSourceChanges: false
+            Branch: !Ref GitHubSnapshotBranch
+            OAuthToken: !Ref GitHubPersonalAccessToken
+          OutputArtifacts:
+            - Name: snapshot-source-artifact
+      - Name: !Sub 'build_${GitHubRepo}_${GitHubSnapshotBranch}'
+        Actions:
+        - Name: !Sub 'build_${GitHubRepo}_${GitHubSnapshotBranch}_action'
+          InputArtifacts:
+          - Name: snapshot-source-artifact
+          ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Version: 1
+            Provider: CodeBuild
+          Configuration:
+            ProjectName: !Sub 'build_${GitHubRepo}_${GitHubSnapshotBranch}_project'
+
+#  ReleasePipeline:
+#    Type: AWS::CodePipeline::Pipeline
+#    Properties:
+#      Name: "QTest-Client-Library Release Pipeline"
+#      Stages:
+#      - Name: "Source"
+#        Actions:
+#        - ActionTypeId:
+#            Category: Source
+#            Owner: ThirdParty
+#            Version: 1
+#            Provider: GitHub
+#        - Configuration:
+#            Category: Source
+#            Owner: !Ref GitHubOwner
+#            Repo: !Ref GitHubRepo
+#            Branch: !Ref GitHubReleaseBranch
+#            OAuthToken: !Ref GitHubPersonalAccessToken
+#        - OutputArtifacts:
+#          - Name: SourceArtifact
+#      - Name: "Build Release"
+#        Actions:
+#        - ActionTypeId:
+#            Category: Build
+#            Owner: AWS
+#            Version: 1
+#            Provider: CodeBuild
+#        - InputArifacts:
+#          - Name: SourceArtifact

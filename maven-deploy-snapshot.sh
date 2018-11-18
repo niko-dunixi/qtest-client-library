@@ -2,5 +2,5 @@
 set -e
 export GPG_TTY=$(tty)
 export GPG_AGENT_INFO
-./install-maven-snapshot.sh
+./maven-install-snapshot.sh
 mvn deploy
