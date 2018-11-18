@@ -5,10 +5,18 @@ function rollback
 {
   mvn release:rollback
 }
-trap rollback ERR
 
 source ./sourceable-variables.sh
 source ./sourceable-ssm-qtest-values.sh
 
-# We clean, push the most recent snapshot, update and tag then push the release
-mvn clean deploy release:prepare release:perform
+# Validate the release
+mvn clean test
+
+# Now that we know it is working, we can skip the tests because they will be run many
+# times, redundantly, otherwise. We can now roleback on release failure as well
+trap rollback ERR
+
+# Release
+mvn release:prepare release:perform -Dmaven.test.skip=true
+# Push the most recent snapshot
+mvn deploy -Dmaven.test.skip=true
