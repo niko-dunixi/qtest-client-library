@@ -29,9 +29,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/paul-nelson-baker/qtest-client-library.git</connection>
-        <developerConnection>scm:git:ssh://github.com:paul-nelson-baker/qtest-client-library.git</developerConnection>
         <url>http://github.com/paul-nelson-baker/qtest-client-library/tree/master</url>
+        <connection>scm:git:git://github.com/paul-nelson-baker/qtest-client-library.git</connection>
+        <developerConnection>scm:git:git@github.com:paul-nelson-baker/qtest-client-library.git</developerConnection>
     </scm>
 
     <licenses>
