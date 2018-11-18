@@ -68,10 +68,25 @@ Resources:
               Resource:
                 - !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/qtest-client-library/integration-test/*'
 
+  SnapshotPipelineWebhook:
+    Type: AWS::CodePipeline::Webhook
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: !Ref GitHubPersonalAccessToken
+      Filters:
+        - JsonPath: "$.ref"
+          MatchEquals: refs/heads/{Branch}
+      TargetPipeline: !Ref SnapshotPipeline
+      TargetAction: SourceAction
+      Name: !Sub '${AWS::StackName}-snapshot-webhook'
+      TargetPipelineVersion: !GetAtt SnapshotPipeline.Version
+      RegisterWithThirdParty: true
+
   SnapshotPipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
-      Name: !Sub '${AWS::StackName}-snapshot-pipeline'
+      Name: !Sub '${AWS::StackName}-snapshot'
       RoleArn: !GetAtt PipelineServiceRole.Arn
       ArtifactStore:
         Type: S3
@@ -122,13 +137,10 @@ Resources:
               commands:
                 - aws s3 cp "${MAVEN_GPG_S3_URI}" "${HOME}/.m2/maven-private-key.asc"
                 - gpg --import "${HOME}/.m2/maven-private-key.asc"
-                - mvn clean
+                - gpg --list-keys
             build:
               commands:
-                - mvn install
-            post_build:
-              commands:
-                - mvn deploy
+                - mvn clean deploy
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -146,34 +158,3 @@ Resources:
           - Name: QTEST_PASS
             Type: PARAMETER_STORE
             Value: !Ref IntegrationTestPassword
-
-
-#  ReleasePipeline:
-#    Type: AWS::CodePipeline::Pipeline
-#    Properties:
-#      Name: "QTest-Client-Library Release Pipeline"
-#      Stages:
-#      - Name: "Source"
-#        Actions:
-#        - ActionTypeId:
-#            Category: Source
-#            Owner: ThirdParty
-#            Version: 1
-#            Provider: GitHub
-#        - Configuration:
-#            Category: Source
-#            Owner: !Ref GitHubOwner
-#            Repo: !Ref GitHubRepo
-#            Branch: !Ref GitHubReleaseBranch
-#            OAuthToken: !Ref GitHubPersonalAccessToken
-#        - OutputArtifacts:
-#          - Name: SourceArtifact
-#      - Name: "Build Release"
-#        Actions:
-#        - ActionTypeId:
-#            Category: Build
-#            Owner: AWS
-#            Version: 1
-#            Provider: CodeBuild
-#        - InputArifacts:
-#          - Name: SourceArtifact
