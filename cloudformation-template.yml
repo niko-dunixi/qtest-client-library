@@ -30,7 +30,9 @@ Resources:
     Properties:
       RoleName: !Sub '${AWS::StackName}-service-role'
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSCodePipelineFullAccess
+#        - arn:aws:iam::aws:policy/AWSCodePipelineFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -51,9 +53,9 @@ Resources:
         Location: !Ref PipelineArtifactBucket
       RestartExecutionOnUpdate: true
       Stages:
-      - Name: !Sub 'stages_${GitHubRepo}_${GitHubSnapshotBranch}'
+      - Name: !Sub 'github_${GitHubRepo}_${GitHubSnapshotBranch}'
         Actions:
-        - Name: !Sub 'github_${GitHubRepo}_${GitHubSnapshotBranch}_action'
+        - Name: !Sub 'github_${GitHubRepo}_${GitHubSnapshotBranch}'
           ActionTypeId:
             Category: Source
             Owner: ThirdParty
@@ -69,7 +71,7 @@ Resources:
             - Name: snapshot-source-artifact
       - Name: !Sub 'build_${GitHubRepo}_${GitHubSnapshotBranch}'
         Actions:
-        - Name: !Sub 'build_${GitHubRepo}_${GitHubSnapshotBranch}_action'
+        - Name: !Sub 'build_${GitHubRepo}_${GitHubSnapshotBranch}'
           InputArtifacts:
           - Name: snapshot-source-artifact
           ActionTypeId:
