@@ -6,6 +6,7 @@ Parameters:
   GitHubPersonalAccessToken:
     Type: 'AWS::SSM::Parameter::Value<String>'
     Default: '/qtest-client-library/github-personal-access-token'
+    NoEcho: true
   GitHubOwner:
     Type: String
     Default: paul-nelson-baker
@@ -18,6 +19,16 @@ Parameters:
   GitHubSnapshotBranch:
     Type: String
     Default: snapshot
+  IntegrationTestSubdomain:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: '/qtest-client-library/integration-test/subdomain'
+  IntegrationTestUsername:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: '/qtest-client-library/integration-test/username'
+  IntegrationTestPassword:
+    Type: 'AWS::SSM::Parameter::Value<String>'
+    Default: '/qtest-client-library/integration-test/password'
+    NoEcho: true
 
 Resources:
   PipelineArtifactBucket:
@@ -33,15 +44,17 @@ Resources:
 #        - arn:aws:iam::aws:policy/AWSCodePipelineFullAccess
         - arn:aws:iam::aws:policy/AmazonS3FullAccess
         - arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
         - Effect: 'Allow'
           Principal:
             Service:
-            - 'codepipeline.amazonaws.com'
+            - codepipeline.amazonaws.com
+            - codebuild.amazonaws.com
           Action:
-          - 'sts:AssumeRole'
+          - sts:AssumeRole
 
   SnapshotPipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -80,7 +93,43 @@ Resources:
             Version: 1
             Provider: CodeBuild
           Configuration:
-            ProjectName: !Sub 'build_${GitHubRepo}_${GitHubSnapshotBranch}_project'
+            ProjectName: !Ref SnapshotCodebuildProject
+  SnapshotCodebuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub '${AWS::StackName}-snapshot-build-project'
+      ServiceRole: !Ref PipelineServiceRole
+      Artifacts:
+        Type: CODEPIPELINE
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: |
+          version: 0.2
+          phases:
+            pre_build:
+              commands:
+                - mvn clean
+            build:
+              commands:
+                - mvn install
+            post_build:
+              commands:
+                - mvn deploy
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/java:openjdk-8
+        EnvironmentVariables:
+          - Name: QTEST_SUBDOMAIN
+            Type: PARAMETER_STORE
+            Value: !Ref IntegrationTestSubdomain
+          - Name: QTEST_USER
+            Type: PARAMETER_STORE
+            Value: !Ref IntegrationTestUsername
+          - Name: QTEST_PASS
+            Type: PARAMETER_STORE
+            Value: !Ref IntegrationTestPassword
+
 
 #  ReleasePipeline:
 #    Type: AWS::CodePipeline::Pipeline
