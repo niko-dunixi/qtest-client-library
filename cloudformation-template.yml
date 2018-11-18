@@ -20,15 +20,14 @@ Parameters:
     Type: String
     Default: snapshot
   IntegrationTestSubdomain:
-    Type: 'AWS::SSM::Parameter::Value<String>'
+    Type: String
     Default: '/qtest-client-library/integration-test/subdomain'
   IntegrationTestUsername:
-    Type: 'AWS::SSM::Parameter::Value<String>'
+    Type: String
     Default: '/qtest-client-library/integration-test/username'
   IntegrationTestPassword:
-    Type: 'AWS::SSM::Parameter::Value<String>'
+    Type: String
     Default: '/qtest-client-library/integration-test/password'
-    NoEcho: true
 
 Resources:
   PipelineArtifactBucket:
@@ -41,20 +40,27 @@ Resources:
     Properties:
       RoleName: !Sub '${AWS::StackName}-service-role'
       ManagedPolicyArns:
-#        - arn:aws:iam::aws:policy/AWSCodePipelineFullAccess
         - arn:aws:iam::aws:policy/AmazonS3FullAccess
         - arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess
         - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-        - Effect: 'Allow'
-          Principal:
-            Service:
-            - codepipeline.amazonaws.com
-            - codebuild.amazonaws.com
-          Action:
-          - sts:AssumeRole
+          - Effect: 'Allow'
+            Principal:
+              Service:
+                - codepipeline.amazonaws.com
+                - codebuild.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub '${AWS::StackName}-integration-test-params-policy'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: 'Allow'
+              Action: 'ssm:GetParametersByPath'
+              Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/qtest-client-library/integration-test/*'
 
   SnapshotPipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -66,34 +72,34 @@ Resources:
         Location: !Ref PipelineArtifactBucket
       RestartExecutionOnUpdate: true
       Stages:
-      - Name: !Sub 'github_${GitHubRepo}_${GitHubSnapshotBranch}'
-        Actions:
         - Name: !Sub 'github_${GitHubRepo}_${GitHubSnapshotBranch}'
-          ActionTypeId:
-            Category: Source
-            Owner: ThirdParty
-            Version: 1
-            Provider: GitHub
-          Configuration:
-            Owner: !Ref GitHubOwner
-            Repo: !Ref GitHubRepo
-            PollForSourceChanges: false
-            Branch: !Ref GitHubSnapshotBranch
-            OAuthToken: !Ref GitHubPersonalAccessToken
-          OutputArtifacts:
-            - Name: snapshot-source-artifact
-      - Name: !Sub 'build_${GitHubRepo}_${GitHubSnapshotBranch}'
-        Actions:
+          Actions:
+            - Name: !Sub 'github_${GitHubRepo}_${GitHubSnapshotBranch}'
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Version: 1
+                Provider: GitHub
+              Configuration:
+                Owner: !Ref GitHubOwner
+                Repo: !Ref GitHubRepo
+                PollForSourceChanges: false
+                Branch: !Ref GitHubSnapshotBranch
+                OAuthToken: !Ref GitHubPersonalAccessToken
+              OutputArtifacts:
+                - Name: snapshot-source-artifact
         - Name: !Sub 'build_${GitHubRepo}_${GitHubSnapshotBranch}'
-          InputArtifacts:
-          - Name: snapshot-source-artifact
-          ActionTypeId:
-            Category: Build
-            Owner: AWS
-            Version: 1
-            Provider: CodeBuild
-          Configuration:
-            ProjectName: !Ref SnapshotCodebuildProject
+          Actions:
+            - Name: !Sub 'build_${GitHubRepo}_${GitHubSnapshotBranch}'
+              InputArtifacts:
+                - Name: snapshot-source-artifact
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: 1
+                Provider: CodeBuild
+              Configuration:
+                ProjectName: !Ref SnapshotCodebuildProject
   SnapshotCodebuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
