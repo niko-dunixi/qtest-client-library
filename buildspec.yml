@@ -1,13 +1,14 @@
 version: 0.2
-  phases:
-    pre_build:
-      commands:
-        - eval $(gpg-agent --daemon --no-grab --write-env-file $HOME/.gpg-agent-info)
-        - export GPG_TTY=$(tty)
-        - export GPG_AGENT_INFO
-        - aws s3 cp "${MAVEN_GPG_S3_URI}" "${HOME}/.m2/maven-private-key.asc"
-        - gpg --import "${HOME}/.m2/maven-private-key.asc"
-        - gpg --list-keys
-    build:
-      commands:
-        - mvn install deploy
+
+phases:
+  pre_build:
+    commands:
+      - eval $(gpg-agent --daemon --no-grab --write-env-file $HOME/.gpg-agent-info)
+      - export GPG_TTY=$(tty)
+      - export GPG_AGENT_INFO
+      - aws s3 cp "${MAVEN_GPG_S3_URI}" "${HOME}/.m2/maven-private-key.asc"
+      - gpg --import "${HOME}/.m2/maven-private-key.asc"
+      - gpg --list-keys
+  build:
+    commands:
+      - mvn install deploy
