@@ -10,4 +10,5 @@ trap rollback ERR
 source ./sourceable-variables.sh
 source ./sourceable-ssm-qtest-values.sh
 
-mvn clean release:prepare release:perform
+# We clean, push the most recent snapshot, update and tag then push the release
+mvn clean deploy release:prepare release:perform
