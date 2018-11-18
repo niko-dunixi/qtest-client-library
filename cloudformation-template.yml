@@ -59,8 +59,11 @@ Resources:
             Version: '2012-10-17'
             Statement:
             - Effect: 'Allow'
-              Action: 'ssm:GetParametersByPath'
-              Resource: !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/qtest-client-library/integration-test/*'
+              Action:
+                - ssm:GetParametersByPath
+                - ssm:GetParameters
+              Resource:
+                - !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/qtest-client-library/integration-test/*'
 
   SnapshotPipeline:
     Type: AWS::CodePipeline::Pipeline
