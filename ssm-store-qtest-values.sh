@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e
-
 source ./sourceable-variables.sh
 
 echo -n "Enter your QTest subdomain: "
