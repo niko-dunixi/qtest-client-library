@@ -43,7 +43,7 @@
 
     <properties>
         <!--Project Meta-->
-        <!--<gpg.useagent>true</gpg.useagent>-->
+        <gpg.useagent>true</gpg.useagent>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--Plugins-->
         <kotlin.version>1.3.10</kotlin.version>
