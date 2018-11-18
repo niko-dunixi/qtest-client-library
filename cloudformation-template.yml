@@ -147,7 +147,7 @@ Resources:
                 - gpg --list-keys
             build:
               commands:
-                - mvn clean deploy
+                - mvn install deploy
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
