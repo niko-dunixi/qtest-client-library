@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -31,8 +32,8 @@
         <url>http://github.com/paul-nelson-baker/qtest-client-library/tree/master</url>
         <connection>scm:git:git://github.com/paul-nelson-baker/qtest-client-library.git</connection>
         <developerConnection>scm:git:git@github.com:paul-nelson-baker/qtest-client-library.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <licenses>
         <license>
@@ -51,6 +52,7 @@
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <dokka.version>0.9.17</dokka.version>
         <!--Dependencies-->
         <junit.version>4.12</junit.version>
         <jackson.version>2.9.6</jackson.version>
@@ -159,13 +161,15 @@
             <version>3.11.1</version>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.assertj</groupId>-->
-        <!--<artifactId>assertj-core-java8</artifactId>-->
-        <!--<version>1.0.0m1</version>-->
-        <!--<scope>test</scope>-->
-        <!--</dependency>-->
     </dependencies>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-plugins</id>
+            <name>spring-plugins</name>
+            <url>http://repo.spring.io/plugins-release/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
@@ -220,6 +224,21 @@
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.dokka</groupId>
+                <artifactId>dokka-maven-plugin</artifactId>
+                <version>${dokka.version}</version>
+                <executions>
+                    <execution>
+                        <!--<phase>pre-site</phase>-->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>dokka</goal>
+                            <goal>javadocJar</goal>
                         </goals>
                     </execution>
                 </executions>
