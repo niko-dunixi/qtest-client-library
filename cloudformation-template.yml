@@ -32,6 +32,12 @@ Parameters:
     Type: String
     Default: 's3://paulbaker-gpg-keys/maven-private-key.asc'
 
+#Outputs:
+#  SnapshotWebhookUrl:
+#    Export:
+#      Name: SnapshotWebhookUrl
+#    Value: !Ref SnapshotPipelineWebhook
+
 Resources:
   PipelineArtifactBucket:
     Type: AWS::S3::Bucket
@@ -79,7 +85,7 @@ Resources:
 #          MatchEquals: refs/heads/{Branch}
           MatchEquals: !Sub 'refs/heads/${GitHubSnapshotBranch}'
       TargetPipeline: !Ref SnapshotPipeline
-      TargetAction: SourceAction
+      TargetAction: !Sub 'github_${GitHubRepo}_${GitHubSnapshotBranch}'
       Name: !Sub '${AWS::StackName}-snapshot-webhook'
       TargetPipelineVersion: !GetAtt SnapshotPipeline.Version
       RegisterWithThirdParty: true
