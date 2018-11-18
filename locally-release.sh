@@ -10,6 +10,4 @@ trap rollback ERR
 source ./sourceable-variables.sh
 source ./sourceable-ssm-qtest-values.sh
 
-mvn clean
-mvn release:prepare
-mvn release:perform
+mvn clean release:prepare release:perform
