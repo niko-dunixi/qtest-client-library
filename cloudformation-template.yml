@@ -28,6 +28,9 @@ Parameters:
   IntegrationTestPassword:
     Type: String
     Default: '/qtest-client-library/integration-test/password'
+  MavenGpgS3Uri:
+    Type: String
+    Default: 's3://paulbaker-gpg-keys/maven-private-key.asc'
 
 Resources:
   PipelineArtifactBucket:
@@ -117,7 +120,8 @@ Resources:
           phases:
             pre_build:
               commands:
-                - gpg -help
+                - aws s3 cp "${MAVEN_GPG_S3_URI}" "${HOME}/.m2/maven-private-key.asc"
+                - gpg --import "${HOME}/.m2/maven-private-key.asc"
                 - mvn clean
             build:
               commands:
@@ -130,6 +134,9 @@ Resources:
         ComputeType: BUILD_GENERAL1_SMALL
         Image: aws/codebuild/java:openjdk-8
         EnvironmentVariables:
+          - Name: MAVEN_GPG_S3_URI
+            Type: PLAINTEXT
+            Value: !Ref MavenGpgS3Uri
           - Name: QTEST_SUBDOMAIN
             Type: PARAMETER_STORE
             Value: !Ref IntegrationTestSubdomain
