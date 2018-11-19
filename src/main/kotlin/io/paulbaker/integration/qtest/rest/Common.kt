@@ -3,7 +3,6 @@ package io.paulbaker.integration.qtest.rest
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -37,7 +36,7 @@ fun asQueryParamString(items: Map<String, String>): String {
     return stringBuilder.toString()
 }
 
-fun asJsonString(item: Item) : String = asJsonString(mapOf(item))
+fun asJsonString(item: Item): String = asJsonString(mapOf(item))
 
 fun asJsonString(items: Map<String, Any>): String = objectMapper.writeValueAsString(items)
 
