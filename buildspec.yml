@@ -4,7 +4,7 @@ phases:
   install:
     commands:
       - apt-get update
-      - DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
+      # - DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
       - apt-get install gnupg2
   pre_build:
     commands:
