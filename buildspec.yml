@@ -5,7 +5,7 @@ phases:
     commands:
       - apt-get update
       # - DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
-      - apt-get install gnupg2
+      - apt-get install gnupg2 --yes
   pre_build:
     commands:
 #      - eval $(gpg-agent --daemon --no-grab --write-env-file $HOME/.gpg-agent-info)
