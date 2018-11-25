@@ -9,10 +9,10 @@ phases:
   pre_build:
     commands:
       - aws s3 cp "${MAVEN_GPG_S3_URI}" "${HOME}/.m2/maven-private-key.asc"
-      - gpg --version
-      - gpg --list-keys
-      - gpg --import "${HOME}/.m2/maven-private-key.asc"
-      - gpg --list-keys
+      - gpg2 --version
+      - gpg2 --list-keys
+      - gpg2 --import "${HOME}/.m2/maven-private-key.asc"
+      - gpg2 --list-keys
 #      - printenv
   build:
     commands:
