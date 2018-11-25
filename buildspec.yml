@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     comands:
-      - apt-get install gnugpg2
+      - apt-get install gnupg2
   pre_build:
     commands:
 #      - eval $(gpg-agent --daemon --no-grab --write-env-file $HOME/.gpg-agent-info)
