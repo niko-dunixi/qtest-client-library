@@ -3,6 +3,7 @@ version: 0.2
 phases:
   install:
     commands:
+      - apt-get update && apt-get upgrade
       - apt-get install gnupg2
   pre_build:
     commands:
